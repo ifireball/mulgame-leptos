@@ -1,10 +1,13 @@
 use leptos::prelude::*;
-use leptos::html::*;
 
 use super::board::Board;
+use super::boardnav::{BoardNav, BoardNext, BoardPrev};
 
 pub fn MulGame() -> impl IntoView {
     (
+        BoardNav(),
         Board(),
+        BoardPrev(),
+        BoardNext(),
     )
 }

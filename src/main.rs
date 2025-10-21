@@ -1,5 +1,4 @@
 use leptos::prelude::*;
-use leptos::html::*;
 
 mod components;
 
