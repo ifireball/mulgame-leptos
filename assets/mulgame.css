@@ -1,0 +1,24 @@
+.game-board {
+    border-collapse: collapse;
+}
+.game-board td {
+    margin: 0;
+    width: 10%;
+    height: 10%;
+    border: 4px solid #ccc;
+    color: #666;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+.game-board tr:first-child td {
+    border-top: none;
+}
+.game-board tr:last-child td {
+    border-bottom: none;
+}
+.game-board td:first-child {
+    border-left: none;
+}
+.game-board td:last-child {
+    border-right: none;
+}
