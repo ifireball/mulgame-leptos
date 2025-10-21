@@ -11,7 +11,7 @@ pub fn MulGame() -> impl IntoView {
         grid-template-rows: 1fr 75vh 1fr;
         grid-template-areas:
             \"...  nav   ...\"
-            \"next board prev\"
+            \"prev board next\"
             \"...  ...   ...\";
     ";
     div().class("mul-game pos-rel wh-100").style(style).child((
