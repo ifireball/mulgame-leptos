@@ -1,17 +1,19 @@
-fn board_index_to_row_col(board_index: u8) -> (u8, u8) {
+use std::fmt;
+
+pub fn board_index_to_row_col(board_index: u8) -> (u8, u8) {
     (board_index / 10, board_index % 10)
 }
 
-fn row_col_to_board_index(row: u8, col: u8) -> u8 {
+pub fn row_col_to_board_index(row: u8, col: u8) -> u8 {
     row * 10 + col
-}
+}   
 
-fn board_index_to_number(board_index: u8) -> u8 {
+pub fn board_index_to_number(board_index: u8) -> u8 {
     let (row, col) = board_index_to_row_col(board_index);
     return row_col_to_number(row, col);
 }
 
-fn row_col_to_number(row: u8, col: u8) -> u8 {
+pub fn row_col_to_number(row: u8, col: u8) -> u8 {
     return (row + 1) * (col + 1);
 }
 
@@ -45,6 +47,7 @@ enum Difficulty {
     MissingAll
 }
 
+#[derive(Clone, Copy)]
 pub enum Cell {
     Empty,
     Number(u8),
@@ -53,6 +56,17 @@ pub enum Cell {
         guess: Option<u8>
     }
 }
+
+impl fmt::Display for Cell {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Cell::Empty => write!(f, ""),
+            Cell::Number(number) => write!(f, "{}", number),
+            Cell::Riddle { guess: Some(guess), ..} => write!(f, "{}", guess),
+            Cell::Riddle { guess: None, ..} => write!(f, "??"),
+        }
+    }
+}   
 
 impl Game {
     pub fn test_game() -> Game {
