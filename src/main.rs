@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+mod model;
 mod components;
 
 use components::MulGame;
