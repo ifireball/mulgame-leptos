@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 use leptos::html::*;
+use leptos::tachys::html::event::click;
+use leptos::tachys::html::event::MouseEvent;
 
 pub fn BoardNav() -> impl IntoView {
     let style = "
@@ -16,10 +18,12 @@ pub fn BoardNav() -> impl IntoView {
     )
 }
 
-pub fn BoardNext() -> impl IntoView {
-    button().class("aljust-center").style("grid-area: next;").child("הבא")
+pub fn BoardNext(on_click: impl FnMut(MouseEvent) + 'static, show: Signal<bool>) -> impl IntoView {
+    button().class("aljust-center").style(("grid-area", "next")).child("הבא").on(click, on_click)
+    .style(move || if show.get() { ("display", "block") } else { ("display", "none") })
 }
 
-pub fn BoardPrev() -> impl IntoView {
-    button().class("aljust-center").style("grid-area: prev;").child("הקודם")
+pub fn BoardPrev(on_click: impl FnMut(MouseEvent) + 'static, show: Signal<bool>) -> impl IntoView {
+    button().class("aljust-center").style(("grid-area", "prev")).child("הקודם").on(click, on_click)
+    .style(move || if show.get() { ("display", "block") } else { ("display", "none") })
 }

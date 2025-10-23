@@ -15,6 +15,19 @@ pub fn MulGame() -> impl IntoView {
         game.boards.get(current_board_idx.get()).unwrap().clone()
     }));
 
+    let on_next_click = move |_| {
+        current_board_idx.set(current_board_idx.get() + 1);
+    };
+    let show_next = Signal::derive(move || {
+        current_board_idx.get() < game.with(|game| game.boards.len() - 1)
+    });
+
+    let on_prev_click = move |_| {
+        current_board_idx.set(current_board_idx.get() - 1);
+    };
+    let show_prev = Signal::derive(move || {
+        current_board_idx.get() > 0
+    });
 
     let style = "
         display: grid;
@@ -28,7 +41,7 @@ pub fn MulGame() -> impl IntoView {
     div().class("mul-game pos-rel wh-100").style(style).child((
         BoardNav(),
         Board(current_board),
-        BoardPrev(),
-        BoardNext(),
+        BoardPrev(on_prev_click, show_prev),
+        BoardNext(on_next_click, show_next),
     ))
 }
