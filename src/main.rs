@@ -3,14 +3,14 @@ use leptos::prelude::*;
 mod model;
 mod components;
 
-use components::MulGame;
+use components::mul_game;
 
 fn main() {
-    leptos::mount::mount_to_body(App);
+    leptos::mount::mount_to_body(app);
 }
 
-fn App() -> impl IntoView {
+fn app() -> impl IntoView {
     (
-        MulGame(),
+        mul_game(),
     )
 }

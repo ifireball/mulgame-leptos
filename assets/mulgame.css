@@ -1,5 +1,28 @@
+@property --angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+@property --scale {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1.0;
+}
+
+
 .game-board {
+    --angle: 0deg;
+    --scale: 1.0;
+    opacity: 1;
+    transform: scale(var(--scale)) rotate(var(--angle));
+    transition: opacity 1.5s ease-in, --angle 1.5s ease-in-out, --scale 1.5s ease-in-out;
+
     border-collapse: collapse;
+}
+.mul-game.transition-out .game-board {
+    --angle: 90deg;
+    --scale: 0.0;
+    opacity: 0;
 }
 .game-board td {
     margin: 0;
