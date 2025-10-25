@@ -58,6 +58,17 @@ pub fn Board(
 }
 
 fn BoardCell(cell: Signal<Cell>) -> impl IntoView {
-    let text = move || { cell.get().to_string() };
-    return text
+    return move || { 
+        if let Cell::Riddle { riddle_index, possible_answers } = cell.get() {
+            return label().class("riddle-controls").child((
+                format!("({})", riddle_index),
+                input().r#type("radio").name("active-riddle").value(riddle_index.to_string()),
+                possible_answers.iter().map(|answer| {
+                    input().r#type("button").value(answer.to_string())
+                }).collect::<Vec<_>>()
+            )).into_any();
+        } else {
+            return cell.get().to_string().into_any();
+        }
+    }
 }
