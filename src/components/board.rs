@@ -48,9 +48,7 @@ pub fn Board(
         (0..10).map(|row| {
             tr().child(
                 (0..10).map(|col| {
-                    td().class("aljust-center").child(
-                        BoardCell(cells[row_col_to_board_index(row, col) as usize].into())
-                    )
+                    BoardCell(cells[row_col_to_board_index(row, col) as usize].into())
                 }).collect::<Vec<_>>().into_view()
             ).into_view()
         }).collect::<Vec<_>>().into_view()
@@ -60,15 +58,17 @@ pub fn Board(
 fn BoardCell(cell: Signal<Cell>) -> impl IntoView {
     return move || { 
         if let Cell::Riddle { riddle_index, possible_answers } = cell.get() {
-            return label().class("riddle-controls").child((
-                format!("({})", riddle_index),
-                input().r#type("radio").name("active-riddle").value(riddle_index.to_string()),
-                possible_answers.iter().map(|answer| {
-                    input().r#type("button").value(answer.to_string())
-                }).collect::<Vec<_>>()
+            return td().class("aljust-center").class("riddle-controls").child((
+                label().child((
+                    format!("({})", riddle_index),
+                    input().r#type("radio").name("active-riddle").value(riddle_index.to_string()),
+                )),
+                possible_answers.iter().enumerate().map(|(index, answer)| {
+                    input().r#type("button").value(answer.to_string()).style(("--index", index.to_string()))
+                }).collect::<Vec<_>>(),
             )).into_any();
         } else {
-            return cell.get().to_string().into_any();
+            return td().class("aljust-center").child(cell.get().to_string()).into_any();
         }
     }
 }
