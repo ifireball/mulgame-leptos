@@ -1,5 +1,3 @@
-use std::fmt;
-
 pub fn board_index_to_row_col(board_index: u8) -> (u8, u8) {
     (board_index / 10, board_index % 10)
 }
@@ -46,27 +44,6 @@ enum Difficulty {
     MissingRowCol,
     MissingAll
 }
-
-#[derive(Clone, Copy)]
-pub enum Cell {
-    Empty,
-    Number(u8),
-    Riddle {
-        possible_answers: [u8; 4],
-        guess: Option<u8>
-    }
-}
-
-impl fmt::Display for Cell {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Cell::Empty => write!(f, ""),
-            Cell::Number(number) => write!(f, "{}", number),
-            Cell::Riddle { guess: Some(guess), ..} => write!(f, "{}", guess),
-            Cell::Riddle { guess: None, ..} => write!(f, "??"),
-        }
-    }
-}   
 
 impl Game {
     pub fn test_game() -> Game {

@@ -1,7 +1,28 @@
 use leptos::prelude::*;
 use leptos::html::*;
+use std::fmt;
 
-use crate::model::{Board, Cell, board_index_to_number, row_col_to_board_index};
+use crate::model::{Board, board_index_to_number, row_col_to_board_index};
+
+#[derive(Clone, Copy)]
+pub enum Cell {
+    Empty,
+    Number(u8),
+    Riddle {
+        riddle_index: u8,
+        possible_answers: [u8; 4],
+    }
+}
+
+impl fmt::Display for Cell {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if let Cell::Number(number) = self {
+            return write!(f, "{}", number);
+        } else {
+            return write!(f, "");
+        }
+    }
+}   
 
 pub fn Board(
     board: Signal<Board>
@@ -15,8 +36,11 @@ pub fn Board(
             cell.set(Cell::Number(board_index_to_number(idx as u8)));
         }
 
-        for riddle in board.riddles {
-            cells[riddle.board_index as usize].set(Cell::Riddle { possible_answers: riddle.possible_answers, guess: None });
+        for (riddle_index, riddle) in board.riddles.iter().enumerate() {
+            cells[riddle.board_index as usize].set(Cell::Riddle { 
+                riddle_index: riddle_index as u8, 
+                possible_answers: riddle.possible_answers 
+            });
         }
     });
 
