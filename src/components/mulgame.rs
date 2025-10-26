@@ -34,10 +34,12 @@ pub fn mul_game() -> impl IntoView {
         game.boards.get(current_board_idx.get()).unwrap().clone()
     }));
     let current_guesses = Signal::derive(move || guesses[current_board_idx.get()].clone());
+    let active_riddle = RwSignal::new("".to_string());
     let transition_class = RwSignal::new(None);
     let classes = Signal::derive(move || { "mul-game pos-rel wh-100 ".to_string() + transition_class.get().unwrap_or("") });
 
     let on_next_click = move |_| {
+        active_riddle.set("".to_string());
         spawn_local(create_transition_task(
             current_board_idx,
             transition_class,
@@ -46,6 +48,7 @@ pub fn mul_game() -> impl IntoView {
     };
     
     let on_prev_click = move |_| {
+        active_riddle.set("".to_string());
         spawn_local(create_transition_task(
             current_board_idx,
             transition_class,
@@ -71,7 +74,7 @@ pub fn mul_game() -> impl IntoView {
     ";
     div().class(classes).style(style).child((
         board_nav(),
-        board(current_board, current_guesses),
+        board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
         board_next(on_next_click, show_next),
     ))
