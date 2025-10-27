@@ -51,7 +51,7 @@ pub fn mul_game() -> impl IntoView {
             active_riddle.set("".to_string());
         }
     });
-    
+
     let on_next_click = move |_| {
         game_nav_state.transition_to(game_nav_state.current_board_idx.get() + 1);
     };
@@ -76,7 +76,7 @@ pub fn mul_game() -> impl IntoView {
             \"...  ...   ...\";
     ";
     div().class(classes).style(style).child((
-        board_nav(),
+        board_nav(game_nav_state),
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
         board_next(on_next_click, show_next),

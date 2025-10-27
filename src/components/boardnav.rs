@@ -3,7 +3,9 @@ use leptos::html::*;
 use leptos::tachys::html::event::click;
 use leptos::tachys::html::event::MouseEvent;
 
-pub fn board_nav() -> impl IntoView {
+use crate::front_model::GameNavState;
+
+pub fn board_nav(game_nav_state: GameNavState) -> impl IntoView {
     let style = "
         grid-area: nav;
         display: flex;
@@ -13,7 +15,9 @@ pub fn board_nav() -> impl IntoView {
 
     nav().class("board-nav pos-rel wh-100").style(style).child(
         (1..=10).map(|i| {
-            button().class("aljust-center nav-button").child(format!("{}", i))
+            button().class("aljust-center nav-button").child(format!("{}", i)).on(click, move |_| {
+                game_nav_state.transition_to(i - 1);
+            })
         }).collect::<Vec<_>>().into_view()
     )
 }
