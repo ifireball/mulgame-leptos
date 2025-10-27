@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 mod model;
+mod front_model;
 mod components;
 
 use components::mul_game;

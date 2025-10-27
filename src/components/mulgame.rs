@@ -7,8 +7,10 @@ use crate::model::Game;
 
 use super::board::board;
 use super::boardnav::{board_nav, board_next, board_prev};
+use crate::front_model::{GameNavState, GameNavPhase};
 
 const BOARD_TRANSITION_DURATION: u32 = 1500;
+
 
 fn create_transition_task(
     current_board_idx: RwSignal<usize>, 
@@ -29,38 +31,36 @@ pub fn mul_game() -> impl IntoView {
     let game = RwSignal::new(Game::test_game());
     let guesses: [RwSignal<[Option<u8>; 4]>; 10] = (0..10).map(|_| RwSignal::new([None; 4])).collect::<Vec<_>>().try_into().unwrap();
 
-    let current_board_idx = RwSignal::new(0);
+    let game_nav_state = GameNavState::new();
     let current_board = Signal::derive(move || game.with(|game| {
-        game.boards.get(current_board_idx.get()).unwrap().clone()
+        game.boards.get(game_nav_state.current_board_idx.get()).unwrap().clone()
     }));
-    let current_guesses = Signal::derive(move || guesses[current_board_idx.get()].clone());
+    let current_guesses = Signal::derive(move || guesses[game_nav_state.current_board_idx.get()].clone());
     let active_riddle = RwSignal::new("".to_string());
-    let transition_class = RwSignal::new(None);
-    let classes = Signal::derive(move || { "mul-game pos-rel wh-100 ".to_string() + transition_class.get().unwrap_or("") });
+    let classes = Signal::derive(move || { 
+        let base_classes = "mul-game pos-rel wh-100".to_string();
+        match game_nav_state.phase.get() {
+            GameNavPhase::TransitioningOut => base_classes + " transition-out",
+            GameNavPhase::TransitioningIn => base_classes + " transition-in",
+            _ => base_classes
+        }
+    });
 
     let on_next_click = move |_| {
         active_riddle.set("".to_string());
-        spawn_local(create_transition_task(
-            current_board_idx,
-            transition_class,
-            current_board_idx.get() + 1
-        ));
+        game_nav_state.transition_to(game_nav_state.current_board_idx.get() + 1);
     };
     
     let on_prev_click = move |_| {
         active_riddle.set("".to_string());
-        spawn_local(create_transition_task(
-            current_board_idx,
-            transition_class,
-            current_board_idx.get() - 1
-        ));
+        game_nav_state.transition_to(game_nav_state.current_board_idx.get() - 1);
     };
 
     let show_next = Signal::derive(move || {
-        current_board_idx.get() < game.with(|game| game.boards.len() - 1)
+        game_nav_state.current_board_idx.get() < game.with(|game| game.boards.len() - 1)
     });
     let show_prev = Signal::derive(move || {
-        current_board_idx.get() > 0
+        game_nav_state.current_board_idx.get() > 0
     });
 
     let style = "
