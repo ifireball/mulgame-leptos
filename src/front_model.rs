@@ -11,7 +11,7 @@ pub enum GameNavPhase {
     TransitioningIn,
 }
 
-trait GameNavPhaseTrait {
+pub trait GameNavPhaseTrait {
     fn is_transitioning(&self) -> bool;
 }
 

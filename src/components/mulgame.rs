@@ -7,7 +7,7 @@ use crate::model::Game;
 
 use super::board::board;
 use super::boardnav::{board_nav, board_next, board_prev};
-use crate::front_model::{GameNavState, GameNavPhase};
+use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait};
 
 const BOARD_TRANSITION_DURATION: u32 = 1500;
 
@@ -46,13 +46,16 @@ pub fn mul_game() -> impl IntoView {
         }
     });
 
+    Effect::new(move || {
+        if game_nav_state.is_transitioning() {
+            active_riddle.set("".to_string());
+        }
+    });
+    
     let on_next_click = move |_| {
-        active_riddle.set("".to_string());
         game_nav_state.transition_to(game_nav_state.current_board_idx.get() + 1);
     };
-    
     let on_prev_click = move |_| {
-        active_riddle.set("".to_string());
         game_nav_state.transition_to(game_nav_state.current_board_idx.get() - 1);
     };
 
