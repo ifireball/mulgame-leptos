@@ -1,41 +1,21 @@
 use leptos::prelude::*;
 use leptos::html::*;
-use leptos::task::spawn_local;
-use gloo_timers::future::TimeoutFuture;
 
 use crate::model::Game;
 
 use super::board::board;
 use super::boardnav::{board_nav, board_next, board_prev};
-use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait};
+use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait, PlayState};
 
-const BOARD_TRANSITION_DURATION: u32 = 1500;
-
-
-fn create_transition_task(
-    current_board_idx: RwSignal<usize>, 
-    transition_class: RwSignal<Option<&'static str>>, 
-    new_board_idx: usize
-) -> impl std::future::Future<Output = ()> + 'static {
-    async move {
-        transition_class.set(Some("transition-out"));
-        TimeoutFuture::new(BOARD_TRANSITION_DURATION).await;
-        current_board_idx.set(new_board_idx);
-        transition_class.set(Some("transition-in"));
-        TimeoutFuture::new(BOARD_TRANSITION_DURATION).await;
-        transition_class.set(None);
-    }
-}
 
 pub fn mul_game() -> impl IntoView {
-    let game = RwSignal::new(Game::test_game());
-    let guesses: [RwSignal<[Option<u8>; 4]>; 10] = (0..10).map(|_| RwSignal::new([None; 4])).collect::<Vec<_>>().try_into().unwrap();
-
+    let play_state = PlayState::new(Game::test_game());
     let game_nav_state = GameNavState::new();
-    let current_board = Signal::derive(move || game.with(|game| {
+
+    let current_board = Signal::derive(move || play_state.game.with(|game| {
         game.boards.get(game_nav_state.current_board_idx.get()).unwrap().clone()
     }));
-    let current_guesses = Signal::derive(move || guesses[game_nav_state.current_board_idx.get()].clone());
+    let current_guesses = Signal::derive(move || play_state.guesses[game_nav_state.current_board_idx.get()].clone());
     let active_riddle = RwSignal::new("".to_string());
     let classes = Signal::derive(move || { 
         let base_classes = "mul-game pos-rel wh-100".to_string();
@@ -60,7 +40,7 @@ pub fn mul_game() -> impl IntoView {
     };
 
     let show_next = Signal::derive(move || {
-        game_nav_state.current_board_idx.get() < game.with(|game| game.boards.len() - 1)
+        game_nav_state.current_board_idx.get() < play_state.game.with(|game| game.boards.len() - 1)
     });
     let show_prev = Signal::derive(move || {
         game_nav_state.current_board_idx.get() > 0
