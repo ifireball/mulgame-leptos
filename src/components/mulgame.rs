@@ -56,7 +56,7 @@ pub fn mul_game() -> impl IntoView {
             \"...  ...   ...\";
     ";
     div().class(classes).style(style).child((
-        board_nav(game_nav_state),
+        board_nav(game_nav_state, play_state),
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
         board_next(on_next_click, show_next),

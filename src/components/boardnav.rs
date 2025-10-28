@@ -3,9 +3,12 @@ use leptos::html::*;
 use leptos::tachys::html::event::click;
 use leptos::tachys::html::event::MouseEvent;
 
-use crate::front_model::GameNavState;
+use crate::front_model::{GameNavState, PlayState, BoardScore};
 
-pub fn board_nav(game_nav_state: GameNavState) -> impl IntoView {
+pub fn board_nav(
+    game_nav_state: GameNavState,
+    play_state: PlayState
+) -> impl IntoView {
     let style = "
         grid-area: nav;
         display: flex;
@@ -15,7 +18,17 @@ pub fn board_nav(game_nav_state: GameNavState) -> impl IntoView {
 
     nav().class("board-nav pos-rel wh-100").style(style).child(
         (1..=10).map(|i| {
-            button().class("aljust-center nav-button").child(format!("{}", i)).on(click, move |_| {
+            let classes = Signal::derive(move || {
+                let base_classes = "aljust-center nav-button".to_string();
+
+                match play_state.get_board_score(i - 1) {
+                    BoardScore::Correct => base_classes + " correct",
+                    BoardScore::Incorrect => base_classes + " incorrect",
+                    BoardScore::Partial => base_classes + " partial",
+                    BoardScore::Empty => base_classes + " empty",
+                }
+            });
+            button().class(classes).child(format!("{}", i)).on(click, move |_| {
                 game_nav_state.transition_to(i - 1);
             })
         }).collect::<Vec<_>>().into_view()

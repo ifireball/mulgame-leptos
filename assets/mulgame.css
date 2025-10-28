@@ -159,6 +159,15 @@
     transform: scale(0.9);
     background-color: #aaf;
 }
+.nav-button.correct {
+    background-color: #dfd;
+}
+.nav-button.incorrect {
+    background-color: #fdd;
+}
+.nav-button.partial {
+    background-color: #ffd;
+}
 
 .next-prev-button {
     width: 13vh;
