@@ -54,6 +54,7 @@
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     position: relative;
+    z-index: 100;
 }
 .game-board tr:first-child td {
     border-top: none;
@@ -82,7 +83,7 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    z-index: 200;
+    z-index: 300;
     position: absolute;
     left: 0;
     top: 0;
@@ -111,7 +112,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 90;
+    z-index: 200;
     transition: all 0.3s ease-out;
     opacity: 0;
     appearance: none;
@@ -188,4 +189,49 @@
 .next-prev-button {
     width: 13vh;
     height: 10vh;
+}
+
+.score-animator {
+    --score-animator-size: 100vw;
+
+    grid-area: board;
+    justify-self: center;
+    align-self: center;
+    z-index: 400;
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+}
+
+@keyframes score-animator-cell-anim { 
+    0% {
+        transform: translateY(0);
+        opacity: 0.2;
+    }
+    25% {
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(-100%);
+        opacity: 0.2;
+    }   
+    100% {
+        transform: translateY(-100%);
+        opacity: 0.2;
+    }
+}
+
+.score-animator .cell {
+    animation: score-animator-cell-anim 2s infinite ease-in-out;
+    --score-animator-cell-size: calc(var(--score-animator-size) / 14);
+    width: var(--score-animator-cell-size);
+    height: calc(var(--score-animator-cell-size) * 2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: calc(var(--score-animator-cell-size) * 0.8);
+}
+
+.score-animator .cell:nth-child(2n+1) {
+    align-items: flex-end;
+    animation-delay: 1s;
 }

@@ -5,6 +5,7 @@ use crate::model::Game;
 
 use super::board::board;
 use super::boardnav::{board_nav, board_next, board_prev};
+use super::score_animator::score_animator;
 use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait, PlayState};
 
 
@@ -51,5 +52,6 @@ pub fn mul_game() -> impl IntoView {
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
         board_next(on_next_click, show_next),
+        score_animator(),
     ))
 }
