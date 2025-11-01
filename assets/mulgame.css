@@ -15,7 +15,21 @@
     initial-value: 0;
 }
 
+.mul-game {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 75vh 1fr;
+    grid-template-rows: 1fr 75vh 1fr;
+    grid-template-areas:
+        "...  nav   ..."
+        "prev board next"
+        "...  ...   ...";
+}
+
 .game-board {
+    grid-area: board;
     --angle: 0deg;
     --scale: 1.0;
     opacity: 1;
@@ -30,6 +44,8 @@
     opacity: 0;
 }
 .game-board td {
+    text-align: center;
+    vertical-align: middle;
     margin: 0;
     width: 10%;
     height: 10%;

@@ -18,7 +18,7 @@ pub fn mul_game() -> impl IntoView {
     let current_guesses = Signal::derive(move || play_state.guesses[game_nav_state.current_board_idx.get()].clone());
     let active_riddle = RwSignal::new("".to_string());
     let classes = Signal::derive(move || { 
-        let base_classes = "mul-game pos-rel wh-100".to_string();
+        let base_classes = "mul-game".to_string();
         match game_nav_state.phase.get() {
             GameNavPhase::TransitioningOut => base_classes + " transition-out",
             GameNavPhase::TransitioningIn => base_classes + " transition-in",
@@ -46,16 +46,7 @@ pub fn mul_game() -> impl IntoView {
         game_nav_state.current_board_idx.get() > 0
     });
 
-    let style = "
-        display: grid;
-        grid-template-columns: 1fr 75vh 1fr;
-        grid-template-rows: 1fr 75vh 1fr;
-        grid-template-areas:
-            \"...  nav   ...\"
-            \"prev board next\"
-            \"...  ...   ...\";
-    ";
-    div().class(classes).style(style).child((
+    div().class(classes).child((
         board_nav(game_nav_state, play_state),
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),

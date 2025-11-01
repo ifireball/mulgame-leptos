@@ -48,7 +48,7 @@ pub fn board(
         }
     });
 
-    table().dir("ltr").class("game-board").style("grid-area: board;").child(
+    table().dir("ltr").class("game-board").child(
         (0..10).map(|row| {
             tr().child(
                 (0..10).map(|col| {
@@ -68,7 +68,7 @@ fn board_cell(cell: Signal<Cell>, guesses: Signal<RwSignal<[Option<u8>; 4]>>, ac
             // the current board index and also only changes on navigation
             let guesses = guesses.get();
             let riddle_index = riddle_index as usize;
-            return td().class("aljust-center").class("riddle-controls").child((
+            return td().class("riddle-controls").child((
                 label().child((
                     move || guesses.with(|guesses| {
                         guesses[riddle_index].map(|guess| guess.to_string()).unwrap_or("??".to_string())
@@ -89,7 +89,7 @@ fn board_cell(cell: Signal<Cell>, guesses: Signal<RwSignal<[Option<u8>; 4]>>, ac
                 }).collect::<Vec<_>>(),
             )).into_any();
         } else {
-            return td().class("aljust-center").child(cell.get().to_string()).into_any();
+            return td().child(cell.get().to_string()).into_any();
         }
     }
 }
