@@ -200,6 +200,7 @@
     z-index: 400;
     display: grid;
     grid-template-columns: repeat(14, 1fr);
+    grid-template-rows: repeat(7, 1fr);
 }
 
 @keyframes score-animator-cell-anim { 
@@ -234,4 +235,25 @@
 .score-animator .cell:nth-child(2n+1) {
     align-items: flex-end;
     animation-delay: 1s;
+}
+
+@keyframes score-animator-hero-anim {
+    0% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(5deg);
+    }
+}
+
+.score-animator .hero {
+    animation: score-animator-hero-anim 0.1s linear infinite alternate;
+    font-size: calc(var(--score-animator-size) / 5);
+    font-weight: bold;
+    position: absolute;
+    width: var(--score-animator-size);
+    height: var(--score-animator-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
