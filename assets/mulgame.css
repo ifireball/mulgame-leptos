@@ -198,13 +198,22 @@
     grid-area: board;
     justify-self: center;
     align-self: center;
-    z-index: 400;
-    display: none;
+    z-index: -100;
+    display: grid;
     grid-template-columns: repeat(14, 1fr);
     grid-template-rows: repeat(7, 1fr);
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
 }
-.mul-game.debug .score-animator {
+.mul-game.debug .score-animator, .mul-game.transition-out .score-animator {
+    z-index: 400;
     display: grid;
+    opacity: 1;
+}
+
+.mul-game.transition-in .score-animator {
+    opacity: 0;
+    transition: opacity 0.5s ease-out 1s;
 }
 
 @keyframes score-animator-cell-anim { 
