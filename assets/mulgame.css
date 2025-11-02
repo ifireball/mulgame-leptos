@@ -37,6 +37,8 @@
     transition: opacity 1.5s ease-in, --angle 1.5s ease-in-out, --scale 1.5s ease-in-out;
 
     border-collapse: collapse;
+    z-index: 100;
+
 }
 .mul-game.transition-out .game-board {
     --angle: 90deg;
@@ -54,7 +56,6 @@
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     position: relative;
-    z-index: 100;
 }
 .game-board tr:first-child td {
     border-top: none;
@@ -198,9 +199,12 @@
     justify-self: center;
     align-self: center;
     z-index: 400;
-    display: grid;
+    display: none;
     grid-template-columns: repeat(14, 1fr);
     grid-template-rows: repeat(7, 1fr);
+}
+.mul-game.debug .score-animator {
+    display: grid;
 }
 
 @keyframes score-animator-cell-anim { 
@@ -220,6 +224,7 @@
         opacity: 0.2;
     }
 }
+
 
 .score-animator .cell {
     animation: score-animator-cell-anim 2s infinite ease-in-out;

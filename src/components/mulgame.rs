@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos::html::*;
+use leptos::ev;
 
 use crate::model::Game;
 
@@ -12,14 +13,18 @@ use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait, PlayStat
 pub fn mul_game() -> impl IntoView {
     let play_state = PlayState::new(Game::test_game());
     let game_nav_state = GameNavState::new();
-
+    let game_debug_state = RwSignal::new(false);
+    
     let current_board = Signal::derive(move || play_state.game.with(|game| {
         game.boards.get(game_nav_state.current_board_idx.get()).unwrap().clone()
     }));
     let current_guesses = Signal::derive(move || play_state.guesses[game_nav_state.current_board_idx.get()].clone());
     let active_riddle = RwSignal::new("".to_string());
     let classes = Signal::derive(move || { 
-        let base_classes = "mul-game".to_string();
+        let mut base_classes = "mul-game".to_string();
+        if game_debug_state.get() {
+            base_classes = base_classes + " debug";
+        }
         match game_nav_state.phase.get() {
             GameNavPhase::TransitioningOut => base_classes + " transition-out",
             GameNavPhase::TransitioningIn => base_classes + " transition-in",
@@ -47,7 +52,11 @@ pub fn mul_game() -> impl IntoView {
         game_nav_state.current_board_idx.get() > 0
     });
 
-    div().class(classes).child((
+    div().class(classes).on(ev::keypress, move |evt| {
+        if evt.key() == "d" {
+            game_debug_state.set(!game_debug_state.get());
+        }
+    }).child((
         board_nav(game_nav_state, play_state),
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
