@@ -5,8 +5,8 @@ use crate::front_model::{GameNavState, PlayState, BoardScore};
 
 const CORRECT_SMALL_CHAR: &str = "👍";
 const INCORRECT_SMALL_CHAR: &str = "👎";
-const PARTIAL_SMALL_CHAR: &str = "🤔";
-const EMPTY_SMALL_CHAR: &str = "🤷";
+const PARTIAL_SMALL_CHAR: &str = "❓";
+const EMPTY_SMALL_CHAR: &str = "❓";
 const CORRECT_HERO_CHAR: &str = "💯";
 const INCORRECT_HERO_CHAR: &str = "💩";
 const PARTIAL_HERO_CHAR: &str = "🤔";
