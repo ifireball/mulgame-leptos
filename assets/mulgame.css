@@ -177,6 +177,9 @@
     transform: scale(0.9);
     background-color: #aaf;
 }
+.nav-button.current {
+    background-color: #fff;
+}
 .nav-button.correct {
     background-color: #dfd;
 }

@@ -21,14 +21,21 @@ pub fn board_nav(
             let classes = Signal::derive(move || {
                 let base_classes = "aljust-center nav-button".to_string();
 
-                match play_state.get_board_score(i - 1) {
-                    BoardScore::Correct => base_classes + " correct",
-                    BoardScore::Incorrect => base_classes + " incorrect",
-                    BoardScore::Partial => base_classes + " partial",
-                    BoardScore::Empty => base_classes + " empty",
+                if i - 1 == game_nav_state.current_board_idx.get() {
+                    base_classes + " current"
+                } else {
+                    match play_state.get_board_score(i - 1) {
+                        BoardScore::Correct => base_classes + " correct",
+                        BoardScore::Incorrect => base_classes + " incorrect",
+                        BoardScore::Partial => base_classes + " partial",
+                        BoardScore::Empty => base_classes + " empty",
+                    }
                 }
             });
             button().class(classes).child(format!("{}", i)).on(click, move |_| {
+                if i - 1 == game_nav_state.current_board_idx.get() {
+                    return;
+                }
                 game_nav_state.transition_to(i - 1);
             })
         }).collect::<Vec<_>>().into_view()
