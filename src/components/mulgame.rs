@@ -7,7 +7,7 @@ use crate::model::Game;
 use super::board::board;
 use super::boardnav::{board_nav, board_next, board_prev};
 use super::score_animator::score_animator;
-use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait, PlayState};
+use crate::front_model::{GameNavState, GameNavPhase, GameNavPhaseTrait, PlayState, BoardScore};
 
 
 pub fn mul_game() -> impl IntoView {
@@ -19,6 +19,8 @@ pub fn mul_game() -> impl IntoView {
         game.boards.get(game_nav_state.current_board_idx.get()).unwrap().clone()
     }));
     let current_guesses = Signal::derive(move || play_state.guesses[game_nav_state.current_board_idx.get()].clone());
+    let current_board_score = Signal::derive(move || play_state.get_board_score(game_nav_state.previous_board_idx.get()));
+    
     let active_riddle = RwSignal::new("".to_string());
     let classes = Signal::derive(move || { 
         let mut base_classes = "mul-game".to_string();
@@ -61,6 +63,6 @@ pub fn mul_game() -> impl IntoView {
         board(current_board, current_guesses, active_riddle),
         board_prev(on_prev_click, show_prev),
         board_next(on_next_click, show_next),
-        score_animator(),
+        score_animator(current_board_score.into()),
     ))
 }

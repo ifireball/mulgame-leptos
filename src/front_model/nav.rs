@@ -31,6 +31,7 @@ impl Default for GameNavPhase {
 pub struct GameNavState {
     pub phase: RwSignal<GameNavPhase>,
     pub current_board_idx: RwSignal<usize>,
+    pub previous_board_idx: RwSignal<usize>,
 }
 
 impl GameNavPhaseTrait for GameNavState {
@@ -41,7 +42,11 @@ impl GameNavPhaseTrait for GameNavState {
 
 impl GameNavState {
     pub fn new() -> Self {
-        Self { phase: RwSignal::new(GameNavPhase::Idle), current_board_idx: RwSignal::new(0) }
+        Self { 
+            phase: RwSignal::new(GameNavPhase::Idle), 
+            current_board_idx: RwSignal::new(0), 
+            previous_board_idx: RwSignal::new(0),
+        }
     }
     pub fn transition_to(&self, new_board_idx: usize) {
         if self.is_transitioning() {
@@ -50,7 +55,9 @@ impl GameNavState {
         self.phase.set(GameNavPhase::TransitioningOut);
         let phase = self.phase.clone();
         let current_board_idx = self.current_board_idx.clone();
+        let previous_board_idx = self.previous_board_idx.clone();
         spawn_local(async move {
+            previous_board_idx.set(current_board_idx.get());
             TimeoutFuture::new(GAME_NAV_TRANSITION_DURATION).await;
             current_board_idx.set(new_board_idx);
             phase.set(GameNavPhase::TransitioningIn);
