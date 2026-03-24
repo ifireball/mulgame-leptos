@@ -41,6 +41,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Build with trunk
         # GitHub Pages typically serves repositories from /<repo-name>/ unless using a custom domain
