@@ -1,0 +1,35 @@
+name: Pull Request Check
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.90.0
+          targets: wasm32-unknown-unknown
+
+      - name: Setup trunk
+        uses: jetli/trunk-action@v0.5.0
+        with:
+          version: 'v0.21.14'
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests
+        run: cargo test
+
+      - name: Build with trunk
+        run: trunk build --release
